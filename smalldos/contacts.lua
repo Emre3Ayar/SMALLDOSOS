@@ -6,7 +6,6 @@ local lume = require "lume"
 
 local contact = {}
 --local select = false
-local font = love.graphics.newFont(14)
 local selectN=1
 --numberData = {0487777310,4,12,17,4,99,04829499,1,14,1,99}
 local numberData = {}
@@ -28,7 +27,6 @@ local displayNumber=0
 --Color settings
 primaryColor={52, 57, 90}
 BackgroundColor={50,128,204}
-test = 0
 
 --Sound
 s = love.audio.newSource("SFXC.wav")
@@ -44,12 +42,9 @@ function contact.load()
 	displayName3 = myApi.getTelefonData(numberData,selectN+2)
 	displayName4 = myApi.getTelefonData(numberData,selectN+3)
 	displayName5 = myApi.getTelefonData(numberData,selectN+4)
-	test = test +1
-	
 end
 
 function contact.draw()
-love.graphics.print(test,10,15)-- window content
 	--Data Display		
 	myApi.tColor(10, 10, primaryColor, {0,0,0}, displayName[1])
 	myApi.tColor(18, 18, primaryColor, {0,0,0}, displayName[0])
@@ -80,11 +75,11 @@ love.graphics.print(test,10,15)-- window content
 	end
 	myApi.inputField(160,120,text) -- window content
 	
-	--CONFIRM button
-	myApi.Button(160,140, primaryColor, "Confirm", 50,20, contact.confirmButtonEvent)
+	--CONFIRM button (using b1, button object from calculator)
+	b1.ButtonEvent(160,140, primaryColor, "Confirm", 50,20, contact.confirmButtonEvent,0)
 	
-	--ADD button
-	myApi.Button2(230,140, primaryColor, "Add", 30,20, contact.addButtonEvent)
+	--ADD button (using b2, button object from calculator)
+	b2.ButtonEvent(230,140, primaryColor, "Add", 30,20, contact.addButtonEvent, 0)
 end
 
 function contact.confirmButtonEvent()

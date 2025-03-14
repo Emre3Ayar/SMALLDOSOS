@@ -2,6 +2,8 @@
 local api = {}
 buttonPressToggle = 0
 buttonPressToggle2 = 0
+api.ButtonO = {}
+s = love.audio.newSource("so.wav")
 function api.encodeDecode(n,b)--n = to be translated data b = decode or encode
 	if b then--(true,decode) from number to string
 		r=""
@@ -105,7 +107,7 @@ end
 function api.inputField(inputFieldX,inputFieldY, text)-- Text field
 	-- keyboard cursor indicator
 	if math.floor(love.timer.getTime()*10)%6 == 0 then
-		bob = font:getWidth(text)
+		bob = love.graphics.getFont():getWidth(text)
 		love.graphics.line(inputFieldX+(bob),inputFieldY,inputFieldX+(bob),inputFieldY+8)
 	else
 		love.graphics.line(0,0,0,0)
@@ -175,6 +177,45 @@ function api.Button2(x,y, pc, buttonText, w, h, event)-- Button (x position butt
 		end
 	end
 	love.graphics.setColor(pc[1], pc[2], pc[3])
+end
+----------------------------
+function api.ButtonO:new()
+	local self = {}
+	--toggle variable
+	self.buttonPressToggle = 0
+	
+	function self.ButtonEvent(x,y, pc, buttonText, w, h, event, value)-- Button (x position button, y position button, primarycolor, button text, width, height, button event)
+		love.graphics.rectangle("fill", x,y, w,h)
+		love.graphics.setColor(255, 255, 255)
+		love.graphics.print(buttonText, x+w/7, y+h/3)
+		love.graphics.setColor(pc[1], pc[2], pc[3])
+		-- button hitbox
+		if love.mouse.isDown(1) and love.mouse.getX() >= x and love.mouse.getX() <= x+w and love.mouse.getY() >= y and love.mouse.getY() <= y+h then
+			self.buttonPressToggle = 2
+		end
+		-- to prevent when button held down
+		if self.buttonPressToggle == 2 then
+			if love.mouse.isDown(1) ~= true then
+				love.graphics.setColor(44, 44, 44)
+				love.graphics.rectangle("fill", x,y, w,h)
+				s:play()
+				event(value)
+				self.buttonPressToggle = 0
+			end
+		end
+		love.graphics.setColor(pc[1], pc[2], pc[3])
+	end
+	
+	function self.changeToggle(a)
+		self.buttonPressToggle = a
+		love.graphics.print(a, 80, 80)
+	end
+	
+	function self.addToggle(a)
+		self.buttonPressToggle = self.buttonPressToggle + a
+	end
+	
+	return self
 end
 
 return api
