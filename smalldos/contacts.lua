@@ -76,10 +76,10 @@ function contact.draw()
 	myApi.inputField(160,120,text) -- window content
 	
 	--CONFIRM button (using b1, button object from calculator)
-	b1.ButtonEvent(160,140, primaryColor, "Confirm", 50,20, contact.confirmButtonEvent,0)
+	b1.ButtonEvent(160,140, primaryColor, "Confirm", 50,20, contact.confirmButtonEvent)
 	
 	--ADD button (using b2, button object from calculator)
-	b2.ButtonEvent(230,140, primaryColor, "Add", 30,20, contact.addButtonEvent, 0)
+	b2.ButtonEvent(230,140, primaryColor, "Add", 30,20, contact.addButtonEvent)
 end
 
 function contact.confirmButtonEvent()

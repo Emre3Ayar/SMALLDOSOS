@@ -1,7 +1,5 @@
 
 local api = {}
-buttonPressToggle = 0
-buttonPressToggle2 = 0
 api.ButtonO = {}
 s = love.audio.newSource("so.wav")
 function api.encodeDecode(n,b)--n = to be translated data b = decode or encode
@@ -53,11 +51,7 @@ function api.encodeDecode(n,b)--n = to be translated data b = decode or encode
 end
 
 function api.deletePerson(n,a)--n = input array a = selected
-	finish = false
-	start = 1
-	ending = 0
-	
-	b = 0
+	finish = false start = 1 ending = 0 b = 0
 	
 	for i=0,#n,1
 	do
@@ -72,27 +66,18 @@ function api.deletePerson(n,a)--n = input array a = selected
 			end
 			b=b+1
 		end
-		
 	end
 	--if start == 1 then start= end
 	for i=1,DataAmount+2,1
-	do
-		--numberData[+i] = nil
-		table.remove(n,(start))
-	end
+	do table.remove(n,(start)) end
 end
 
 function api.getTelefonData(n,a)--n = input array a = selected
-	b=0
-	r={}
-	rr={}
-	j=1
+	b=0 r={} rr={} j=1
 	
 	for i=0,#n,1
 	do
-		if n[i] == 99 then
-			b=b+1
-		end
+		if n[i] == 99 then b=b+1 end
 		if b==a-1 then
 			r[j] = n[i+1]
 			j = j+1
@@ -158,27 +143,8 @@ function api.Button(x,y, pc, buttonText, w, h, event)-- Button (x position butto
 	love.graphics.setColor(pc[1], pc[2], pc[3])
 end
 
-function api.Button2(x,y, pc, buttonText, w, h, event)-- Button (x position button, y position button, primarycolor, button text, width, height, button event)
-	love.graphics.rectangle("fill", x,y, w,h)
-	love.graphics.setColor(255, 255, 255)
-	love.graphics.print(buttonText, x+w/7, y+h/3)
-	love.graphics.setColor(pc[1], pc[2], pc[3])
-	-- button hitbox
-	if love.mouse.isDown(1) and love.mouse.getX() >= x and love.mouse.getX() <= x+w and love.mouse.getY() >= y and love.mouse.getY() <= y+h then
-		buttonPressToggle2 = 2
-	end
-	-- to prevent when button held down
-	if buttonPressToggle2 == 2 then
-		if love.mouse.isDown(1) ~= true then
-			love.graphics.setColor(44, 44, 44)
-			love.graphics.rectangle("fill", x,y, w,h)
-			event()
-			buttonPressToggle2 = 0
-		end
-	end
-	love.graphics.setColor(pc[1], pc[2], pc[3])
-end
 ----------------------------
+--Simpel Button with toggle press
 function api.ButtonO:new()
 	local self = {}
 	--toggle variable
@@ -205,15 +171,28 @@ function api.ButtonO:new()
 		end
 		love.graphics.setColor(pc[1], pc[2], pc[3])
 	end
+	-- Button with image
+	function self.ButtonImageEvent(x,y, pc, w, h, event, value, image)-- Button (x position button, y position button, primarycolor, button text, width, height, button event)
+		love.graphics.draw(image, x, y)
+		-- button hitbox
+		if love.mouse.isDown(1) and love.mouse.getX() >= x and love.mouse.getX() <= x+w and love.mouse.getY() >= y and love.mouse.getY() <= y+h then
+			self.buttonPressToggle = 2
+		end
+		-- to prevent when button held down
+		if self.buttonPressToggle == 2 then
+			if love.mouse.isDown(1) ~= true then
+				s:play()
+				event(value)
+				self.buttonPressToggle = 0
+			end
+		end
+	end
 	
 	function self.changeToggle(a)
 		self.buttonPressToggle = a
 		love.graphics.print(a, 80, 80)
 	end
-	
-	function self.addToggle(a)
-		self.buttonPressToggle = self.buttonPressToggle + a
-	end
+	function self.addToggle(a) self.buttonPressToggle = self.buttonPressToggle + a end
 	
 	return self
 end
