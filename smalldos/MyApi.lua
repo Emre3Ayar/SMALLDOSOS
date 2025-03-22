@@ -4,7 +4,7 @@ api.ButtonO = {}
 s = love.audio.newSource("so.wav")
 function api.encodeDecode(n,b)--n = to be translated data b = decode or encode
 	if b then--(true,decode) from number to string
-		r=""
+		local r=""
 		for i=0,#n,1
 			do
 				if n[i] == 0 then r=r.."A" 
@@ -24,7 +24,7 @@ function api.encodeDecode(n,b)--n = to be translated data b = decode or encode
 			 end
 		end
 	else --(false,Encode) from String to number  
-		r={}
+		local r={}
 		r[1] = n[1]
 		for i=1,string.len(n[2]),1
 			do
@@ -51,7 +51,7 @@ function api.encodeDecode(n,b)--n = to be translated data b = decode or encode
 end
 
 function api.deletePerson(n,a)--n = input array a = selected
-	finish = false start = 1 ending = 0 b = 0
+	local finish = false start = 1 ending = 0 b = 0
 	
 	for i=0,#n,1
 	do
@@ -73,7 +73,7 @@ function api.deletePerson(n,a)--n = input array a = selected
 end
 
 function api.getTelefonData(n,a)--n = input array a = selected
-	b=0 r={} rr={} j=1
+	local b=0 local r={} local rr={} local j=1
 	
 	for i=0,#n,1
 	do
@@ -92,7 +92,7 @@ end
 function api.inputField(inputFieldX,inputFieldY, text)-- Text field
 	-- keyboard cursor indicator
 	if math.floor(love.timer.getTime()*10)%6 == 0 then
-		bob = love.graphics.getFont():getWidth(text)
+		local bob = love.graphics.getFont():getWidth(text)
 		love.graphics.line(inputFieldX+(bob),inputFieldY,inputFieldX+(bob),inputFieldY+8)
 	else
 		love.graphics.line(0,0,0,0)
@@ -104,8 +104,8 @@ end
 function api.smurfWindow(x,y, ww, wh, pc)--drawing window x, y position ww = window width wh = window height
 	--love.graphics.newCanvas(130, 50)
 	--border
-	borderWidth = 5
-	textPadding = 10
+	local borderWidth = 5
+	local textPadding = 10
 	love.graphics.setColor(pc[1], pc[2], pc[3])
 	love.graphics.rectangle("fill", x-(borderWidth+textPadding), y-(borderWidth+textPadding),ww+textPadding,wh+textPadding)
 	-- window inside
@@ -143,6 +143,18 @@ function api.Button(x,y, pc, buttonText, w, h, event)-- Button (x position butto
 	love.graphics.setColor(pc[1], pc[2], pc[3])
 end
 
+function api.TextRec(x,y, pc, Text, w, h)-- Button (x position button, y position button, primarycolor, button text, width, height, button event)
+		love.graphics.rectangle("fill", x,y, w,h)
+		love.graphics.setColor(255, 255, 255)
+		
+		tt = love.graphics.getFont():getWidth(Text)
+		love.graphics.print(Text, x+w/2-tt/2, y+h/3)
+		
+		
+		love.graphics.setColor(pc[1], pc[2], pc[3])
+		love.graphics.setColor(pc[1], pc[2], pc[3])
+	end
+
 ----------------------------
 --Simpel Button with toggle press
 function api.ButtonO:new()
@@ -153,7 +165,9 @@ function api.ButtonO:new()
 	function self.ButtonEvent(x,y, pc, buttonText, w, h, event, value)-- Button (x position button, y position button, primarycolor, button text, width, height, button event)
 		love.graphics.rectangle("fill", x,y, w,h)
 		love.graphics.setColor(255, 255, 255)
-		love.graphics.print(buttonText, x+w/7, y+h/3)
+		--text centering
+		local t = love.graphics.getFont():getWidth(buttonText)
+		love.graphics.print(buttonText, x+w/2-t/2, y+h/3)
 		love.graphics.setColor(pc[1], pc[2], pc[3])
 		-- button hitbox
 		if love.mouse.isDown(1) and love.mouse.getX() >= x and love.mouse.getX() <= x+w and love.mouse.getY() >= y and love.mouse.getY() <= y+h then

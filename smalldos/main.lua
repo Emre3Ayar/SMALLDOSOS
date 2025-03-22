@@ -6,6 +6,8 @@ local contact = require "contacts"
 local calculator = require "calcu"
 local sysinfo = require "sysinfo"
 local notes = require "notes"
+local seq = require "seq"
+local music = require "music"
 
 selection = 0
 local s
@@ -24,10 +26,13 @@ function love.load()
 	image3 = love.graphics.newImage("U2.png")
 	image4 = love.graphics.newImage("U3.png")
 	image5 = love.graphics.newImage("U4.png")
+	image6 = love.graphics.newImage("U5.png")
+	image7 = love.graphics.newImage("U6.png")
 	--load events
 	contact.load()
 	calculator.load()
 	sysinfo.load()
+	seq.load()
 	--sound
 	s:play()
 	--buttons
@@ -35,6 +40,8 @@ function love.load()
 	buttonContact = myApi.ButtonO:new()
 	buttonCalculator = myApi.ButtonO:new()
 	buttonNotes = myApi.ButtonO:new()
+	buttonSeq = myApi.ButtonO:new()
+	buttonMusic = myApi.ButtonO:new()
 end
 
 function love.draw()
@@ -45,6 +52,8 @@ function love.draw()
 		--myApi.Button2(20,80, primaryColor, "System info", 60,20, sysinfoButtonEvent)
 		buttonSysinfo.ButtonImageEvent(20, 80, primaryColor, 60,20, sysinfoButtonEvent, 0, image3)
 		buttonNotes.ButtonImageEvent(20, 110, primaryColor, 60,20, NoteButtonEvent, 0, image5)
+		buttonSeq.ButtonImageEvent(20, 140, primaryColor, 60,20, SeqButtonEvent, 0, image6)
+		buttonMusic.ButtonImageEvent(70, 20, primaryColor, 60,20, musicButtonEvent, 0, image7)
 	elseif selection == 1 then
 		contact.draw()
 	elseif selection == 2 then
@@ -53,6 +62,10 @@ function love.draw()
 		sysinfo.draw()
 	elseif selection == 4 then
 		notes.draw()
+	elseif selection == 5 then
+		seq.draw()
+	elseif selection == 6 then
+		music.draw()
 	end
 	-- MOUSE -- Mouse event always at the end to render it last
 	quad = love.graphics.newQuad(0.1, 0.1, 50,50)
@@ -74,6 +87,14 @@ function NoteButtonEvent()
 	selection = 4
 end
 
+function SeqButtonEvent()
+	selection = 5
+end
+
+function musicButtonEvent()
+	selection = 6
+end
+
 function love.textinput(t)
 	if selection == 1 then
 		contact.textinput(t)
@@ -88,20 +109,23 @@ function love.keypressed(key)
 		contact.keypressed(key)
 	elseif selection == 4 then
 		notes.keypressed(key)
+	elseif selection == 5 then
+		seq.keypressed(key)
 	end
 	
 	-- end program --
 	if key == "escape" and selection == 0 then
 		love.event.quit()
-	elseif key == "escape" and selection == 1 then
+	elseif key == "escape" and selection > 0 then
 		--love.filesystem.write("save", serialize(numberData))
+		music.keypressed(key)
 		selection = 0
-	elseif key == "escape" and selection == 2 then
-		selection = 0
-	elseif key == "escape" and selection == 3 then
-		selection = 0
-	elseif key == "escape" and selection == 4 then
-		selection = 0
+	end
+end
+
+function love.update(dt)
+	if selection == 5 then
+		seq.update(dt)
 	end
 end
 
